@@ -1,0 +1,149 @@
+/* signup.css - styles for Sign Up page */
+:root{
+  --bg: #f4f6fb;
+  --accent: #286aef;
+  --card: #ffffff;
+  --muted: rgba(0,0,0,0.65);
+}
+
+*{box-sizing: border-box; margin:0; padding:0; font-family: 'Arial', sans-serif;}
+
+body {
+  background: linear-gradient(180deg, #eef2ff 0%, var(--bg) 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* outer wrapper */
+.signup-wrap {
+  width: 1100px;
+  max-width: 95%;
+}
+
+/* card */
+.card {
+  display: flex;
+  background: linear-gradient(180deg, rgba(255,255,255,0.98), var(--card));
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(16,24,40,0.08);
+  overflow: hidden;
+}
+
+/* left info panel */
+.card-left {
+  width: 40%;
+  padding: 48px;
+  background: linear-gradient(135deg, #1f2937, #111827);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-left h1 {
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+
+.card-left p {
+  color: rgba(255,255,255,0.85);
+  line-height: 1.6;
+}
+
+.card-left .info {
+  margin-top: 20px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.8);
+}
+
+.card-left a { color: #fff; text-decoration: underline; }
+
+/* right form panel */
+.card-right {
+  width: 60%;
+  padding: 32px 40px;
+}
+
+.card-right h2 {
+  margin-bottom: 18px;
+  color: #111827;
+}
+
+/* form layout */
+form .row {
+  display: flex;
+  gap: 16px;
+}
+
+.field {
+  margin-bottom: 14px;
+  flex: 1;
+}
+
+.field label {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(16,24,40,0.08);
+  outline: none;
+  font-size: 15px;
+  background: #fff;
+}
+
+.field input:focus,
+.field select:focus {
+  box-shadow: 0 6px 18px rgba(40,106,239,0.12);
+  border-color: rgba(40,106,239,0.32);
+}
+
+.checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.submit-btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+
+.submit-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(40,106,239,0.16);
+}
+
+.small {
+  font-size: 13px;
+  color: rgba(0,0,0,0.45);
+  margin-top: 12px;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .card { flex-direction: column; }
+  .card-left, .card-right { width: 100%; }
+  .card-left { padding: 28px; text-align: center; }
+  .card-right { padding: 24px; }
+  form .row { flex-direction: column; }
+}

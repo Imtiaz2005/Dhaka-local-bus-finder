@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Your Bus - Dhaka Local Bus Finder</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #2b32b2, #1488cc);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 850px;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      padding: 40px 50px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 30px;
+      color: #2b32b2;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    input {
+      flex: 1;
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      outline: none;
+      font-size: 15px;
+      transition: all 0.3s;
+    }
+
+    input:focus {
+      border-color: #2b32b2;
+      box-shadow: 0 0 8px rgba(43, 50, 178, 0.3);
+    }
+
+    button {
+      background: linear-gradient(135deg, #2b32b2, #1488cc);
+      color: #fff;
+      padding: 14px 30px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #1488cc, #2b32b2);
+      transform: translateY(-2px);
+    }
+
+    .suggestions {
+      position: absolute;
+      background: #fff;
+      border: 1px solid #ccc;
+      width: 48%;
+      max-height: 150px;
+      overflow-y: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+
+    .suggestions div {
+      padding: 10px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .suggestions div:hover {
+      background: #e8f0fe;
+    }
+
+    .result {
+      margin-top: 30px;
+    }
+
+    .bus-card {
+      background: #f7f9ff;
+      border-radius: 10px;
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      border-left: 5px solid #2b32b2;
+      text-align: left;
+    }
+
+    .bus-card h3 {
+      margin: 0 0 5px;
+      color: #1a1a1a;
+    }
+
+    .bus-card p {
+      margin: 3px 0;
+      color: #444;
+      font-size: 14px;
+    }
+
+    .no-result {
+      text-align: center;
+      color: #999;
+      margin-top: 25px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>Find Your Local Bus 🚌</h1>
+    <div class="form-group">
+      <div style="position:relative; width:48%;">
+        <input type="text" id="from" placeholder="Enter your present place (e.g. Mirpur)"
+          oninput="showSuggestions(this, 'fromList')">
+        <div class="suggestions" id="fromList"></div>
+      </div>
+      <div style="position:relative; width:48%;">
+        <input type="text" id="to" placeholder="Enter your destination (e.g. Motijheel)"
+          oninput="showSuggestions(this, 'toList')">
+        <div class="suggestions" id="toList"></div>
+      </div>
+      <button onclick="findBus()">Search</button>
+    </div>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    // Bus database
+    const busData = [
+
+      {
+        route: ["Sadarghat", "Ray Saheb Bazar", "Naya Bazar", "Golap Shah Mazar", "GPO", "Gulistan", "Paltan", "Kakrail", "Shantinagar", "Malibaag Moor", "Mouchak", "Malibagh Railgate", "Hazipara", "Rampura Bazar", "Rampura Bridge", "Merul Badda", "Badda", "Shahjadpur", "Bashtola", "Notun Bazar", "Nadda", "Bashundhara", "Jamuna Future Park", "Kuril Bishwa Road"],
+        name: "Victor Classic",
+        price: 20
+      },
+      { route: ["Gabtoli", "Technical", "Ansar Camp", "Mirpur 1", "Sony Cinema Hall", "Mirpur 2", "Mirpur 10", "Mirpur 11", "Purobi", "Kalshi", "ECB Square", "MES", "Shewra", "Kuril Bishwa Road", "Jamuna Future Park", "Bashundhara", "Nadda", "Notun Bazar", "Bashtola", "Shahjadpur", "Uttar Badda", "Badda", "Madhya Badda", "Merul", "Rampura Bridge", "Banasree", "Demra Staff Quarter"], name: "Achim Paribahan", price: 25 },
+      { route: ["Postagola", "Dholairpar", "Jatrabari", "Janapath Moor", "Sayedabad", "Mugdapara", "Bashabo", "Khilgaon", "Malibagh Railgate", "Rampura Bazar", "Rampura Bridge", "Merul", "Badda", "Uttar Badda", "Bashtola", "Notun Bazar", "Nadda", "Bashundhara", "Jamuna Future Park", "Kuril Chourasta", "Kuril Bishwa Road", "Khilkhet", "Airport", "Jashimuddin (Uttara)", "Rajlakshmi", "Azampur", "House Building", "Dia Bari"], name: "Raida", price: 15 },
+      { route: ["Savar", "Hemayetpur", "Amin Bazar", "Gabtoli", "Technical", "Kallyanpur", "Shyamoli", "Shishu Mela", "Agargaon", "Bijoy Sarani", "Jahangir Gate", "Mohakhali", "Gulshan 1", "Badda Link Road", "Bashtola", "Uttar Badda", "Notun Bazar"], name: "Baishakhi", price: 15 },
+      { route: ["Sayedabad", "Manik Nagar", "TT Para ","Kamalapur", "Malibagh Moor", "Mouchak", "Mogbazar", "Satrasta", "Nabisco", "Mohakhali", "Chairman Bari", "Banani", "Kakali", "Staff Road", "MES", "Shewra", "Kuril Bishwa Road", "Khilkhet", "Airport", "Jashimuddin (Uttara)", "Rajlakshmi", "Azampur", "House Building", "Abdullahpur", "Tongi", "Station Road", "Mill Gate", "Board Bazar", "Gazipur Bypass", "Gazipur Chourasta"], name: "Balaka", price: 50 },
+      { route: ["Savar", "Hemayetpur", "Amin Bazar", "Gabtoli", "Technical", "Kallyanpur", "Shyamoli", "Shishu Mela", "Agargaon", "Zia Uddyan", "Bijoy Sarani", "Jahangir Gate", "Mohakhali", "Wireless", "Gulshan 1", "Badda Link Road", "Bashtola", "Shahjadpur", "Uttar Badda", "Notun Bazar"], name: "Agradut", price: 9 },
+      { route: ["Gabtoli", "Technical", "Kallyanpur", "Shyamoli", "Shishu Mela", "College Gate", "Asad Gate", "Mohammadpur", "Shankar", "Star Kabab", "Dhanmondi 15", "Jigatola", "City College", "Science Lab", "Bata Signal", "Shahbag", "Matsya Bhaban", "Kakrail", "Shantinagar", "Malibagh Moor", "Mouchak", "Malibagh Railgate", "Hazipara", "Rampura Bazar", "Rampura Bridge", "Banasree", "Demra Staff Quarter"], name: "Ramjan", price: 15 },
+      { route: ["Fulbaria", "Golap Shah Mazar", "GPO", "Paltan", "Press Club", "High Court", "Matsya Bhaban", "Shahbag", "Bangla Motor", "Kawran Bazar", "Farmgate", "Bijoy Sarani", "Jahangir Gate", "Mohakhali", "Chairman Bari", "Sainik Club", "Banani", "Kakali", "Staff Road", "MES", "Shewra", "Kuril Bishwa Road", "Khilkhet", "Airport", "Jashimuddin (Uttara)", "Rajlakshmi", "Azampur", "House Building", "Abdullahpur"], name: "Airport Bangabandhu Avenue Transport", price: 50 },
+      { route: ["Sadarghat", "Ray Saheb Bazar", "Naya Bazar", "Golap Shah Mazar", "GPO", "Paltan", "Kakrail", "Shantinagar", "Malibagh Moor", "Mouchak", "Nabisco", "Mohakhali", "Sainik Club", "Banani", "Kakali", "Staff Road", "MES", "Shewra", "Kuril Bishwa Road", "Khilkhet", "Airport", "Jashimuddin (Uttara)", "Rajlakshmi", "Azampur", "House Building", "Abdullahpur", "Tongi", "Station Road", "Mill Gate", "Board Bazar", "Gazipur Bypass", "Konabari", "Chandra"], name: "Ajmeri Glory", price: 30 },
+      { route: ["Japan Garden City", "Ring Road", "Adabor", "Shyamoli", "Shishu Mela", "Agargaon", "Zia Uddyan", "Bijoy Sarani", "Old Airport", "Jahangir Gate", "Mohakhali", "Chairman Bari", "Sainik Club", "Kakali", "Banani", "Staff Road", "MES", "Shewra", "Kuril Bishwa Road", "Khilkhet", "Airport", "Jashimuddin (Uttara)", "Rajlakshmi", "Azampur", "House Building", "Abdullahpur"], name: "Bhuiyan Paribahan", price: 25 },];
+
+    // All possible places
+    const allPlaces = [...new Set(busData.flatMap(b => b.route))];
+
+    // Show suggestions dynamically
+    function showSuggestions(input, listId) {
+      const val = input.value.toLowerCase();
+      const list = document.getElementById(listId);
+      list.innerHTML = "";
+
+      if (val === "") return;
+
+      const matched = allPlaces.filter(p => p.toLowerCase().startsWith(val));
+
+      matched.forEach(p => {
+        const div = document.createElement("div");
+        div.textContent = p;
+        div.onclick = () => {
+          input.value = p;
+          list.innerHTML = "";
+        };
+        list.appendChild(div);
+      });
+    }
+
+    function findBus() {
+      const from = document.getElementById("from").value.trim();
+      const to = document.getElementById("to").value.trim();
+      const resultDiv = document.getElementById("result");
+
+      resultDiv.innerHTML = "";
+
+      if (!from || !to) {
+        resultDiv.innerHTML = "<p class='no-result'>⚠️ Please enter both places.</p>";
+        return;
+      }
+
+      const available = busData.filter(
+        b => b.route.includes(from) && b.route.includes(to)
+      );
+
+      if (available.length === 0) {
+        resultDiv.innerHTML = `<p class='no-result'>❌ No local bus found between <b>${from}</b> and <b>${to}</b>.</p>`;
+        return;
+      }
+
+      available.forEach(b => {
+        const div = document.createElement("div");
+        div.className = "bus-card";
+        div.innerHTML = `
+          <h3>${b.name}</h3>
+          <p><b>Route:</b> ${b.route.join(" ➤ ")}</p>
+          <p><b>Fare:</b> ${b.price} Taka</p>
+        `;
+        resultDiv.appendChild(div);
+      });
+    }
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,341 @@
+*{
+    margin: 0;padding: 0;
+}
+body{
+  background: linear-gradient(135deg, #0d182f, #f4f4f4d0);
+}
+.line{
+  width: 100vw;
+  height: 4px;
+  background-color: #d99820;
+  border-radius: 255px;
+      margin: -3px 1px 1px 1px;
+      box-shadow: #fafafa;
+}
+.cover img{
+    position: relative;
+       width: 100vw;
+    height: 704px;
+   margin: auto;
+}
+.cover .box{
+    background-color: #1e1e1e83;
+     width: 100vw;
+    height: 704px;
+margin: auto;
+    position: absolute;
+    top: 0;
+}
+.nav-mid{
+    position: absolute;
+    top: 0;
+    z-index: 3px;
+}
+.nav{
+    width: 90vw;
+    height: 54px;
+    position: relative;
+    /* background-color: aqua; */
+    display: flex;
+    justify-content: space-between;
+    justify-items: center;
+    /* text-align: center; */
+    margin: 27px 6px 115px 56px;
+    margin-top: 20px;
+    /* padding-top: 34px; */
+      font-family: 'Arial', 'Helvetica', sans-serif;
+    color: rgba(255, 255, 255, 0.843);
+    z-index: 4;
+    
+    }
+    a{
+        text-decoration: none;color: rgba(255, 255, 255, 0.843);
+    }
+    .nav img{
+           width: 139px;
+    filter: brightness(0) saturate(100%) invert(83%) sepia(52%) saturate(541%) hue-rotate(8deg) brightness(101%) contrast(101%);
+
+
+  transition: filter .25s ease;
+    }
+  
+
+
+.nav img:hover {
+  filter: hue-rotate(200deg) saturate(2) brightness(1.1);
+}
+
+    .nav button{
+    background-color: #286aef;
+    padding: 4px 12px 4px 12px;
+    border-radius: 12px;
+        margin-top: -15px;
+    }
+    /* Middle section animation */
+.middle {
+  display: flex;
+  margin: 49px -33px 0px 59px;
+  opacity: 0;
+  transform: scale(0.98);
+  animation: fadeIn 1.2s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+    .left{
+        width: 40vw;
+        /* background-color: #da5656; */
+        height: 550px;
+    }
+  .left h1 {
+  font-size: 102px;
+  color: rgba(255, 255, 255, 0.843);
+  text-shadow: 0 0 6px rgba(88,121,231,0.25), 0 0 14px rgba(88,121,231,0.18);
+  animation: glowPulse 2.8s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0% {
+    text-shadow: 0 0 4px rgba(88,121,231,0.18), 0 0 10px rgba(88,121,231,0.12);
+    transform: translateY(0);
+  }
+  50% {
+    text-shadow: 0 0 12px rgba(88,121,231,0.45), 0 0 26px rgba(88,121,231,0.28);
+    transform: translateY(-2px);
+  }
+  100% {
+    text-shadow: 0 0 4px rgba(88,121,231,0.18), 0 0 10px rgba(88,121,231,0.12);
+    transform: translateY(0);
+  }
+}
+
+
+    .left p{
+         color: rgba(255, 255, 255, 0.74);
+    }
+    .left button{
+     margin: 45px -404px 3px -7px;
+    padding: 23px 69px 27px 69px;
+    border-radius: 54px;
+    background-color: #5879e7f3;
+  color: rgba(255, 255, 255, 0.843);
+    }
+    .right img{
+      height: 564px;
+    width: 726px;
+margin: -67px 12px 0px 21px;
+    }
+    /* Bus Gallery Section */
+.bus-gallery {
+    padding: 50px;
+color: rgba(255, 255, 255, 0.843);
+    text-align: center;
+}
+
+.bus-gallery h2 {
+    font-size: 48px;
+    margin-bottom: 40px;
+    color: #ffffff;
+}
+
+/* Grid setup */
+/* Grid setup for 5 cards per row */
+.bus-gallery .grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 card per row */
+    gap: 20px; /* card এর মধ্যে gap */
+}
+
+/* Card height adjust */
+.card-inner {
+    height: 150px; /* ছোট করে নিলাম যাতে 5 card ভালো দেখায় */
+}
+
+/* .bus-gallery .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+} */
+
+/* Flip Card */
+.card {
+    perspective: 1000px;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+}
+
+.card:hover .card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Card front and back */
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.card-front {
+    background-color: #fff;
+    color: #333;
+}
+
+.card-front img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-front h3 {
+    margin: 10px 0;
+}
+
+.card-back {
+    background: linear-gradient(135deg, #2ce208, #0fa9dd);
+    color: #fff;
+    transform: rotateY(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    padding: 10px;
+}
+/* ===== Footer Section ===== */
+.footer {
+  background-color: #000; /* কালো ব্যাকগ্রাউন্ড */
+  color: rgba(255, 255, 255, 0.8);
+  padding: 60px 50px 20px 50px;
+  font-family: 'Arial', sans-serif;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 column */
+  gap: 40px;
+}
+
+.footer-column h3 {
+  color: #ffffff;
+  margin-bottom: 15px;
+  font-size: 22px;
+  border-bottom: 2px solid #286aef;
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-column ul li {
+  margin: 10px 0;
+}
+
+.footer-column a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-column a:hover {
+  color: #286aef; /* Hover color */
+}
+
+.footer-column p {
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+/* Bottom Part */
+.footer-bottom {
+  text-align: center;
+  margin-top: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  padding-top: 15px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Responsive Footer */
+@media (max-width: 900px) {
+  .footer-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .footer-container {
+    grid-template-columns: 1fr;
+  }
+  .footer {
+    text-align: center;
+  }
+}
+/* ===== Newsletter Section ===== */
+.newsletter {
+  background: linear-gradient(135deg, #484646, #203941);
+  color: white;
+  text-align: center;
+  padding: 60px 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+.newsletter h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.newsletter p {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 25px;
+}
+
+.newsletter input {
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  width: 280px;
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.newsletter button {
+  padding: 12px 30px;
+  border: none;
+  border-radius: 6px;
+  background-color: #286aef;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.newsletter button:hover {
+  background-color: #1a50b9;
+}
+
+@media (max-width: 600px) {
+  .newsletter input {
+    width: 90%;
+    margin: 10px 0;
+  }
+}
